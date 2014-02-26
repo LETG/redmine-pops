@@ -1,3 +1,0 @@
-= pops_project
-
-Description goes here
