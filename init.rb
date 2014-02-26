@@ -1,5 +1,6 @@
 require File.join(File.dirname(__FILE__), 'lib/pops_project_hook_listener')
 require File.join(File.dirname(__FILE__), 'app/models/project')
+require File.join(File.dirname(__FILE__), 'app/models/support')
 Redmine::Plugin.register :pops_project do
   name 'Pops Project plugin'
   author 'Dotgee'

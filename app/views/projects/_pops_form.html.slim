@@ -1,12 +1,24 @@
 p
+  label = t('field_support')
+  = form.collection_select :support_id, Support.all, :id, :name
+p
   = form.text_field :accronym, required: true
-  = form.text_area :objectifs, required: true, style: "height: 150px;"
+p
+  = form.text_area :objectifs, required: true
+p
   = form.text_area :resume
+p
   = form.text_area :methodologies
+p
   = form.text_area :results
+p
   = form.text_area :perspectives
+p
   = form.text_area :comments
+p
   = form.text_field :url_public
+p
   = form.text_field :url_project
-  = form.text_field :start_date
+p
+  = form.text_field :start_date, required: true
 
