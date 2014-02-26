@@ -1,7 +1,12 @@
 p
-  'Hello pops hook
+  = form.text_field :accronym, required: true
+  = form.text_area :objectifs, required: true, style: "height: 150px;"
+  = form.text_area :resume
+  = form.text_area :methodologies
+  = form.text_area :results
+  = form.text_area :perspectives
+  = form.text_area :comments
+  = form.text_field :url_public
+  = form.text_field :url_project
+  = form.text_field :start_date
 
-fieldset
-  p
-    = form.label :summary
-    = form.text_area :summary

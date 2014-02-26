@@ -1,0 +1,46 @@
+p
+  h4 = t('field_objectifs')
+  br
+  = project.objectifs
+  br
+  br
+  - unless project.resume.blank? || project.resume.nil?
+    h4 = t('field_resume')
+    br
+    = project.resume
+    br
+    br
+  - unless project.methodologies.blank? || project.methodologies.nil?
+    h4 = t('field_methodologies')
+    br
+    = project.methodologies
+    br
+    br
+  - unless project.results.blank? || project.results.nil?
+    h4 = t('field_results')
+    br
+    = project.results
+    br
+    br
+  - unless project.perspectives.blank? || project.perspectives.nil?
+    h4 = t('field_perspectives')
+    br
+    = project.perspectives
+    br
+    br
+  - unless project.comments.blank? || project.comments.nil?
+    h4 = t('field_comments')
+    br
+    = project.comments
+    br
+    br
+  - unless project.url_public.blank? || project.url_public.nil?
+    h4 = t('field_url_public')
+    br
+    = project.url_public
+    br
+    br
+  - unless project.url_project.blank? || project.url_project.nil?
+    h4 = t('field_url_project')
+    br
+    = project.url_project
