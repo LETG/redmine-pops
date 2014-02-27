@@ -1,0 +1,9 @@
+br
+br
+p
+  - project.dmsf_folders.each do |folder|
+    h4 = folder.description
+    - folder.files.visible.each do |file|
+      br
+      - file_download_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'show', :id => file, :download => ''})
+      = link_to h(file.last_revision.display_title), file_download_url
