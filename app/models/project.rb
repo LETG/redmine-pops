@@ -7,5 +7,5 @@ module PopsProject
     belongs_to :support
   end
 end
-Project.include(PopsProject)
+Project.send(:include, PopsProject)
 
