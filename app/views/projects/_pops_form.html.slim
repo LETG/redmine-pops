@@ -1,24 +1,17 @@
-p
-  label = t('field_support')
-  = form.collection_select :support_id, Support.all, :id, :name
-p
-  = form.text_field :accronym, required: true
-p
-  = form.text_area :objectifs, required: true
-p
-  = form.text_area :resume
-p
-  = form.text_area :methodologies
-p
-  = form.text_area :results
-p
-  = form.text_area :perspectives
-p
-  = form.text_area :comments
-p
-  = form.text_field :url_public
-p
-  = form.text_field :url_project
-p
-  = form.text_field :start_date, required: true
+p= form.text_field :accronym, required: true
+p= form.text_area :objectifs, required: true, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_objectifs'
+p= form.text_area :resume, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_resume'
+p= form.text_area :methodologies, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_methodologies'
+p= form.text_area :results, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_results'
+p= form.text_area :perspectives, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_perspectives'
+p= form.text_area :comments, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_comments'
+p= form.text_field :url_public
+p= form.text_field :url_project
+p= form.text_field :start_date
 
