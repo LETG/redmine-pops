@@ -1,9 +1,13 @@
+h3 = project.accronym
+h4 = project.name
+- unless project.resume.blank? || project.resume.nil?
+   p= project.resume.html_safe
+
+br
+
 h4 = t('field_objectifs')
 p= project.objectifs.html_safe
 
-- unless project.resume.blank? || project.resume.nil?
-  h4 = t('field_resume')
-  p= project.resume.html_safe
 - unless project.methodologies.blank? || project.methodologies.nil?
   h4 = t('field_methodologies')
   p= project.methodologies.html_safe
