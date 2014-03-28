@@ -28,7 +28,7 @@ br
 
 - unless project.url_public.blank? || project.url_public.nil?
   h4 = t('field_url_public')
-  p= link_to project.url_public, project.url_public
+  p= project.url_public
 - unless project.url_project.blank? || project.url_project.nil?
   h4 = t('field_url_project')
-  p= link_to project.url_project, project.url_project
+  p= project.url_project
