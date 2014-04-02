@@ -1,6 +1,14 @@
 #project_id value='#{project.id}'
-h4 = project.name
-p= project.resume.html_safe
+
+- unless project.lab_name.blank? || project.lab_name.nil?
+  h4 = t('field_lab_name').pluralize
+  p= project.lab_name.html_safe
+- unless project.sponsor.blank? || project.sponsor.nil?
+  h4 = t('field_sponsor')
+  p= project.sponsor.html_safe
+- unless project.resume.blank? || project.resume.nil?
+  h4 = t('field_resume')
+  p= project.resume.html_safe
 
 br
 
@@ -19,17 +27,6 @@ br
 - unless project.comments.blank? || project.comments.nil?
   h4 = t('field_comments')
   p= project.comments.html_safe
-
-- unless project.lab_name.blank? || project.lab_name.nil?
-  h4 = t('field_lab_name')
-  p= project.lab_name.html_safe
-- unless project.sponsor.blank? || project.sponsor.nil?
-  h4 = t('field_sponsor')
-  p= project.sponsor.html_safe
-
 - unless project.url_public.blank? || project.url_public.nil?
   h4 = t('field_url_public')
   p= link_to project.url_public, project.url_public, target: "_blank"
-- unless project.url_project.blank? || project.url_project.nil?
-  h4 = t('field_url_project')
-  p= link_to project.url_project, project.url_project, target: "_blank"

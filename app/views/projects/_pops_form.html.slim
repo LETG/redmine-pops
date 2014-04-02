@@ -1,10 +1,10 @@
 / p= form.text_field :lab_name
 
 p= form.text_field :accronym, required: true
-p= form.text_area :objectifs, required: true, class: 'wiki-edit', rows: '10'
-= wikitoolbar_for 'project_objectifs'
-p= form.text_area :resume, class: 'wiki-edit', rows: '10'
+p= form.text_area :resume,required: true, class: 'wiki-edit', rows: '10'
 = wikitoolbar_for 'project_resume'
+p= form.text_area :objectifs, class: 'wiki-edit', rows: '10'
+= wikitoolbar_for 'project_objectifs'
 p= form.text_area :methodologies, class: 'wiki-edit', rows: '10'
 = wikitoolbar_for 'project_methodologies'
 p= form.text_area :results, class: 'wiki-edit', rows: '10'
@@ -14,9 +14,10 @@ p= form.text_area :perspectives, class: 'wiki-edit', rows: '10'
 p= form.text_area :comments, class: 'wiki-edit', rows: '10'
 = wikitoolbar_for 'project_comments'
 
+p= form.select :support_id, Support.all.collect{|s| [s.name, s.id]}, {}, {class: 'Select2', style: 'width: 300px; margin-bottom: 15px;'}
 p= form.text_field :sponsor
+
 p= form.text_field :url_public
-p= form.text_field :url_project
 p= form.text_field :starts_date, required: true, class: "datepicker", value: project.starts_date ? project.starts_date.strftime("%d/%m/%Y") : Date.today.strftime("%d/%m/%Y")
 p= form.text_field :ends_date, required: true, class: "datepicker", value: project.ends_date ? project.ends_date.strftime("%d/%m/%Y") : Date.today.strftime("%d/%m/%Y")
 
