@@ -3,7 +3,7 @@ module ProjectsControllerPatch
     base.class_eval do
       before_filter :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :timeline]
       before_filter :authorize_global, :only => [:new, :create]
-      before_filter :require_admin, :only => [ :copy, :archive, :unarchive, :destroy, :timeline]
+      before_filter :require_admin, :only => [ :copy, :archive, :unarchive, :destroy]
       accept_rss_auth :index
       accept_api_auth :index, :show, :create, :update, :destroy, :timeline
 
