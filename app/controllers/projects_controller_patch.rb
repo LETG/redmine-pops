@@ -9,7 +9,7 @@ module ProjectsControllerPatch
 
       def timeline
         p = @project
-        c = DocumentCategory.find_by_name('Productions')
+        c = DocumentCategory.find_by_name('Gestion de projet')
         docs = [{}]
         docs.push({startDate: Date.today.strftime('%Y,%m,%d'), endDate: Date.today.strftime('%Y,%m,%d'), headline: "Aujourd'hui", text: "", tag: "", classname: ""})
         docs.push({startDate: (p.starts_date ? p.starts_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), endDate: (p.ends_date ? p.ends_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), headline: p.accronym, text: (p.resume if p.resume), tag: "", classname: ""})
