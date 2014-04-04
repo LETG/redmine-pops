@@ -6,6 +6,8 @@ module PopsProject
     validates :accronym, :resume, :starts_date, :ends_date, presence: true, allow_nil: false
     belongs_to :support
 
+    delegate :name, to: :support, prefix: :support
+
     def self.latest(user=nil, count=5)
       visible(user).limit(count).order("starts_date DESC").all
     end

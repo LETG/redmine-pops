@@ -5,7 +5,10 @@
   p= project.lab_name.html_safe
 - unless project.sponsor.blank? || project.sponsor.nil?
   h4 = t('field_sponsor')
-  p= project.sponsor.html_safe
+  p
+    = project.support_name
+    br
+    = project.sponsor.html_safe
 - unless project.resume.blank? || project.resume.nil?
   h4 = t('field_resume')
   p= project.resume.html_safe
