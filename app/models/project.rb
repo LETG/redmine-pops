@@ -9,7 +9,8 @@ module PopsProject
     delegate :name, to: :support, prefix: :support
 
     def self.latest(user=nil, count=5)
-      visible(user).limit(count).order("starts_date DESC").all
+      # visible(user).limit(count).order("starts_date DESC").collect {|p| [p] if p.ancestors.empty? }
+      visible(user).order("starts_date DESC").select {|p| [p] if p.ancestors.empty? }.first(count)
     end
 
   end
