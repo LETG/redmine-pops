@@ -9,12 +9,17 @@ module ProjectsControllerPatch
 
       def timeline
         p = @project
-        c = DocumentCategory.find_by_name('Gestion de projet')
+        c = DocumentCategory.where(name: "Gestion de projet").first
         docs = [{}]
         docs.push({startDate: Date.today.strftime('%Y,%m,%d'), endDate: Date.today.strftime('%Y,%m,%d'), headline: "Aujourd'hui", text: "", tag: "", classname: ""})
         docs.push({startDate: (p.starts_date ? p.starts_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), endDate: (p.ends_date ? p.ends_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), headline: p.accronym, text: (p.resume if p.resume), tag: "", classname: ""})
-        p.documents.where(category_id: c.id).each do |d|
-          docs.push( {startDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d') , endDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d'), headline: d.title, text: "", tag: "", classname: ""})
+        p.documents.where(visible_in_timeline: true).each do |d|
+          link = d.attachments.any? ? view_context.link_to(d.title,d.attachments.first, target: "_blank") : (d.url_to.nil? ? d.title : view_context.link_to(d.title, d.url_to, target: "_blank"))
+          docs.push( {startDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d') , endDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d'), headline: link, text: "", tag: "", classname: ""})
+        end
+        p.news.where(visible_in_timeline: true).each do |n|
+          link = view_context.link_to(n.title, n, target: "_blank")
+          docs.push( {startDate: n.created_on ? n.created_on.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d') , endDate: n.created_on ? n.created_on.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d'), headline: link, text: "", tag: "", classname: ""})
         end
 
         respond_to do |format|
