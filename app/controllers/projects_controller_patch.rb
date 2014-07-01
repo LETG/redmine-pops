@@ -27,8 +27,24 @@ module ProjectsControllerPatch
           format.json  { render :json => msg }
         end
       end
-    end
 
+      def new
+        @issue_custom_fields = IssueCustomField.sorted.all
+        @trackers = Tracker.sorted.all
+        @project = Project.new
+        @project.safe_attributes = params[:project]
+        @project.labs.build
+      end
+
+      def edit
+        @project.labs.build
+      end
+
+      # def update
+      #   raise params.inspect
+      # end
+
+    end
   end
 end
 
