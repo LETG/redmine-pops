@@ -1,8 +1,5 @@
 #project_id value='#{project.id}'
 
-/ - unless project.lab_name.blank? || project.lab_name.nil?
-/   h4 = t('field_lab_name').pluralize
-/   p= project.lab_name.html_safe
 - if project.labs.any?
   h4 = t('field_lab_name').pluralize
   - project.labs.each do |lab|
