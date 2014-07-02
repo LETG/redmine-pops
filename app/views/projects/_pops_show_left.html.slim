@@ -31,6 +31,6 @@ br
 - unless project.comments.blank? || project.comments.nil?
   h4 = t('field_comments')
   p= project.comments.html_safe
-- unless project.url_public.blank? || project.url_public.nil?
-  h4 = t('field_url_public')
-  p= link_to project.url_public, project.url_public, target: "_blank"
+/ - unless project.url_public.blank? || project.url_public.nil?
+/   h4 = t('field_url_public')
+/   p= link_to project.url_public, project.url_public, target: "_blank"

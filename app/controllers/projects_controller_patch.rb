@@ -40,10 +40,6 @@ module ProjectsControllerPatch
         @project.labs.build
       end
 
-      # def update
-      #   raise params.inspect
-      # end
-
     end
   end
 end
