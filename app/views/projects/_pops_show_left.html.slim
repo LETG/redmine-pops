@@ -1,9 +1,11 @@
 #project_id value='#{project.id}'
 
 - if project.labs.any?
-  h4 = t('field_lab_name').pluralize
-  - project.labs.each do |lab|
-    p= link_to lab.name, lab.url, target: "_blank"
+  h4 = t('field_lab_partner')
+  p
+    - project.labs.each do |lab|
+      = link_to lab.name, lab.url, target: "_blank"
+      br
 - unless project.sponsor.blank? || project.sponsor.nil?
   h4 = t('field_sponsor')
   p
