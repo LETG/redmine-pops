@@ -29,6 +29,20 @@ module PopsProject
       end
     end
 
+    def css_classes
+      s = 'project'
+      s << ' root' if root?
+      s << ' child' if child?
+      s << (leaf? ? ' leaf' : ' ')
+      unless active?
+        if archived?
+          s << ' archived'
+        else
+          s << ' closed'
+        end
+      end
+    end 
+
   end
 end
 Project.send(:include, PopsProject)
