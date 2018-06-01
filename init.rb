@@ -3,6 +3,7 @@ require File.join(File.dirname(__FILE__), 'app/models/project')
 require File.join(File.dirname(__FILE__), 'app/models/support')
 require File.join(File.dirname(__FILE__), 'app/models/news')
 require File.join(File.dirname(__FILE__), 'app/models/user')
+require File.join(File.dirname(__FILE__), 'app/models/changeset')
 require File.join(File.dirname(__FILE__), 'app/controllers/projects_controller_patch')
 require File.join(File.dirname(__FILE__), 'app/controllers/news_controller_patch')
 

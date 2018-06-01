@@ -1,5 +1,6 @@
 require 'active_support/concern'
-module PopsProject
+
+module PopsUser
   extend ActiveSupport::Concern
   included do
     safe_attributes 'login',
@@ -16,4 +17,4 @@ module PopsProject
   end
 end
 
-User.send(:include, PopsProject)
+User.send(:include, PopsUser)

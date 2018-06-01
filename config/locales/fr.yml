@@ -11,3 +11,6 @@ fr:
   field_url_project: URL du projet
   field_support: Soutien
   field_lab_partner: Laboratoires/Partenaire
+  field_announcement_date: Date de programmation prévue
+  label_jump_to_a_project: Aller à un de mes projets...
+  label_archived_projects: Projets archivés ou fermés
