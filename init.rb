@@ -7,7 +7,6 @@ require File.join(File.dirname(__FILE__), 'app/models/changeset')
 require File.join(File.dirname(__FILE__), 'app/controllers/projects_controller_patch')
 require File.join(File.dirname(__FILE__), 'app/controllers/news_controller_patch')
 
-
 Redmine::Plugin.register :pops_project do
   name 'Pops Project plugin'
   author 'Dotgee'

@@ -19,6 +19,8 @@ module PopsProject
   end
 
   module ClassMethods
+
+
     def latest(user=nil, count=5)
       # visible(user).limit(count).order("starts_date DESC").collect {|p| [p] if p.ancestors.empty? }
       visible(user).order("starts_date DESC").select {|p| [p] if p.ancestors.empty? }.first(count)
