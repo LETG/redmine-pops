@@ -5,6 +5,15 @@ module PopsNews
 
   included do
     safe_attributes 'title', 'summary', 'description', 'visible_in_timeline', 'announcement_date', 'private'
+
+    # Suppression de la validation de Redmine par défaut
+    _validators[:title].reject!{ |v| v.is_a?(ActiveModel::Validations::LengthValidator) && v.options.has_key?(:maximum) }
+
+    _validate_callbacks.each do |callback|
+      callback.raw_filter.attributes.delete :title if callback.raw_filter.is_a?(ActiveModel::Validations::LengthValidator) && callback.raw_filter.options.has_key?(:maximum)
+    end
+
+    validates_length_of :title, :maximum => 150
     
     scope :visible, lambda { |*args|
       joins(:project).
