@@ -17,7 +17,7 @@ module ProjectsControllerPatch
           link = d.attachments.one? ? view_context.link_to(d.title,d.attachments.first, target: "_blank") : (d.url_to.nil? ? d.title : view_context.link_to(d.title, d, target: "_blank"))
           docs.push( {startDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d') , endDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d'), headline: link, text: "", tag: "", classname: ""})
         end
-        p.news.where(visible_in_timeline: true).each do |n|
+        p.news.visible.where(visible_in_timeline: true).each do |n|
           link = view_context.link_to(n.display_title, n, target: "_blank")
           docs.push( {startDate: n.timeline_display_date, endDate: n.timeline_display_date, headline: link, text: "", tag: "", classname: ""})
         end
