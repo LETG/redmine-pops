@@ -8,23 +8,75 @@ module ProjectsControllerPatch
       accept_api_auth :index, :show, :create, :update, :destroy, :timeline
 
       def timeline
-        p = @project
-        c = DocumentCategory.where(name: "Gestion de projet").first
-        docs = [{}]
-        docs.push({startDate: Date.today.strftime('%Y,%m,%d'), endDate: Date.today.strftime('%Y,%m,%d'), headline: "Aujourd'hui", text: "", tag: "", classname: ""})
-        docs.push({startDate: (p.starts_date ? p.starts_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), endDate: (p.ends_date ? p.ends_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), headline: p.name, text: (p.resume if p.resume), tag: "", classname: ""})
-        p.documents.visible.where(visible_in_timeline: true).each do |d|
-          link = d.attachments.one? ? view_context.link_to(d.title,d.attachments.first, target: "_blank") : (d.url_to.nil? ? d.title : view_context.link_to(d.title, d, target: "_blank"))
-          docs.push( {startDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d') , endDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d'), headline: link, text: "", tag: "", classname: ""})
-        end
-        p.news.visible.where(visible_in_timeline: true).each do |n|
-          link = view_context.link_to(n.display_title, n, target: "_blank")
-          docs.push( {startDate: n.timeline_display_date, endDate: n.timeline_display_date, headline: link, text: "", tag: "", classname: ""})
+        json = { 
+          events: [
+            {
+              start_date: "",
+              end_date: "",
+              text: "",
+              media: "",
+              background: { color: "#17C4BB" }
+            }
+          ]
+        }
+
+        @timeline_events = []
+
+        @timeline_events.push({
+          start_date: {
+            year: Date.today.year,
+            month: Date.today.month,
+            day: Date.today.day
+          },
+          text: {
+            text: "<div class='today'>Aujourd'hui</div>"
+          }
+        })
+
+        @project.documents.visible.where(visible_in_timeline: true).each do |document|
+          @timeline_events.push({
+            start_date: {
+              year: (document.created_date ? document.created_date.year : Date.today.year),
+              month: (document.created_date ? document.created_date.month : Date.today.month),
+              day: (document.created_date ? document.created_date.day : Date.today.day)
+            },
+            text: document.timeline_text(view_context)
+          })
         end
 
+        @project.news.visible.where(visible_in_timeline: true).each do |news|
+          link = view_context.link_to(news.display_title, news, target: "_blank")
+          
+          @timeline_events.push({
+            start_date: {
+              year: news.timeline_date.year,
+              month: news.timeline_date.month,
+              day: news.timeline_date.day
+            },
+            background: { 
+              color: "#17c4bb"
+            },
+            text: news.timeline_text(view_context)
+          })
+        end
+
+        # p = @project
+        # c = DocumentCategory.where(name: "Gestion de projet").first
+        # docs = [{}]
+        # docs.push({startDate: Date.today.strftime('%Y,%m,%d'), endDate: Date.today.strftime('%Y,%m,%d'), headline: "Aujourd'hui", text: "", tag: "", classname: ""})
+        # docs.push({startDate: (p.starts_date ? p.starts_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), endDate: (p.ends_date ? p.ends_date.strftime('%Y,%m,%d') : Date.today.strftime('%Y,%m,%d')), headline: p.name, text: (p.resume if p.resume), tag: "", classname: ""})
+        # p.documents.visible.where(visible_in_timeline: true).each do |d|
+        #   link = d.attachments.one? ? view_context.link_to(d.title,d.attachments.first, target: "_blank") : (d.url_to.nil? ? d.title : view_context.link_to(d.title, d, target: "_blank"))
+        #   docs.push( {startDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d') , endDate: d.created_date ? d.created_date.strftime("%Y,%m,%d") : Date.today.strftime('%Y,%m,%d'), headline: link, text: "", tag: "", classname: ""})
+        # end
+        # p.news.visible.where(visible_in_timeline: true).each do |n|
+        #   link = view_context.link_to(n.display_title, n, target: "_blank")
+        #   docs.push( {startDate: n.timeline_display_date, endDate: n.timeline_display_date, headline: link, text: "", tag: "", classname: ""})
+        # end
+
         respond_to do |format|
-          msg = { timeline: { headline: "", type: "default", text: "", date: docs } }
-          format.json  { render :json => msg }
+          # msg = { timeline: { headline: "", type: "default", text: "", date: docs } }
+          format.json  { render :json => { events: @timeline_events }.to_json }
         end
       end
 

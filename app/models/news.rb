@@ -26,6 +26,11 @@ module PopsNews
       query
     end
 
+    def timeline_date 
+      announcement_date ? announcement_date :
+      created_on        ? created_on : Date.today
+    end
+
     def timeline_display_date format='%Y,%m,%d'
       announcement_date ? announcement_date.strftime(format) :
       created_on        ? created_on.strftime(format) : Date.today.strftime(format)
@@ -33,6 +38,12 @@ module PopsNews
 
     def display_title
       "#{title} - #{timeline_display_date('%d/%m/%Y')}"
+    end
+
+    def timeline_text(view_context)
+      {
+        headline: view_context.link_to("<div class='news'><div class='icon'><span class='fa fa-bullhorn'></span></div><div class='content'>#{self.display_title}</div></div>".html_safe, self, target: "_blank")
+      }
     end
   end
 end
