@@ -22,6 +22,29 @@ module ProjectsControllerPatch
 
         @timeline_events = []
 
+        # docs.push({startDate: Date.today.strftime('%Y,%m,%d'), endDate: Date.today.strftime('%Y,%m,%d'), headline: "Aujourd'hui", text: "", tag: "", classname: ""})
+        @timeline_events.push({
+          start_date: {
+            year: (@project.starts_date ? @project.starts_date.year : Date.today.year), 
+            month: (@project.starts_date ? @project.starts_date.month : Date.today.month), 
+            day: (@project.starts_date ? @project.starts_date.day : Date.today.day)
+          },
+          end_date: {
+            year: (@project.ends_date ? @project.ends_date.year : Date.today.year),
+            month: (@project.ends_date ? @project.ends_date.month : Date.today.month),
+            day: (@project.ends_date ? @project.ends_date.day : Date.today.day),
+          },
+          text: {
+            headline: @project.name,
+            text: (@project.resume if @project.resume)
+          },
+          unique_id: "project_event"
+        });
+
+
+        #     , headline: p.name, text: (p.resume if p.resume), tag: "", classname: ""})
+
+
         @timeline_events.push({
           start_date: {
             year: Date.today.year,
