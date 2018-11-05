@@ -13,7 +13,7 @@ module PopsProject
 
     has_many :labs
 
-    before_create :generate_identifier
+    #before_create :generate_identifier
 
     accepts_nested_attributes_for :labs, reject_if: :all_blank, allow_destroy: true
   end
