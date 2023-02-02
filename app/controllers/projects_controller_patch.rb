@@ -1,14 +1,19 @@
 module ProjectsControllerPatch
   def self.included(base)
     base.class_eval do
-      before_action :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :timeline]
-      before_action :authorize_global, :only => [:new, :create]
-      before_action :require_admin, :only => [ :copy, :archive, :unarchive, :destroy]
+      helper 'projects'
+
+      before_action    :permit_parameters, only: [ :create, :update ]
+      before_action    :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :timeline ]
+      before_action    :authorize_global, :only => [:new, :create ]
+      before_action    :require_admin, :only => [ :copy, :archive, :unarchive, :destroy ]
       accept_atom_auth :index
-      accept_api_auth :index, :show, :create, :update, :destroy, :timeline
+      accept_api_auth  :index, :show, :create, :update, :destroy, :timeline
+
+      self.main_menu = false
 
       def timeline
-        json = { 
+        json = {
           events: [
             {
               start_date: "",
@@ -69,14 +74,14 @@ module ProjectsControllerPatch
 
         @project.news.visible.where(visible_in_timeline: true).each do |news|
           link = view_context.link_to(news.display_title, news, target: "_blank")
-          
+
           @timeline_events.push({
             start_date: {
               year: news.timeline_date.year,
               month: news.timeline_date.month,
               day: news.timeline_date.day
             },
-            background: { 
+            background: {
               color: "#17c4bb"
             },
             text: news.timeline_text(view_context)
@@ -114,6 +119,7 @@ module ProjectsControllerPatch
       def edit
         @project.labs.build
       end
+
       # Lists visible projects
       def index
         respond_to do |format|
@@ -161,6 +167,11 @@ module ProjectsControllerPatch
           format.api
         end
       end
+
+      protected
+        def permit_parameters
+          params.permit!
+        end
     end
   end
 end

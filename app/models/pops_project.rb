@@ -29,7 +29,7 @@ module PopsProject
   
   # Returns a hash of project users grouped by role
   def users_by_role
-    members.includes(:user, :roles).where("name != 'Observateur'").all.inject({}) do |h, m|
+    members.joins(:user, :roles).where("roles.name != 'Observateur'").all.inject({}) do |h, m|
       m.roles.each do |r|
         h[r] ||= []
         h[r] << m.user
