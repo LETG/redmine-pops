@@ -4,6 +4,7 @@ require File.join(File.dirname(__FILE__), 'app/models/support')
 require File.join(File.dirname(__FILE__), 'app/models/pops_news')
 require File.join(File.dirname(__FILE__), 'app/models/pops_user')
 require File.join(File.dirname(__FILE__), 'app/models/pops_changeset')
+require File.join(File.dirname(__FILE__), 'app/models/project_query_decorator')
 require File.join(File.dirname(__FILE__), 'app/controllers/projects_controller_patch')
 require File.join(File.dirname(__FILE__), 'app/controllers/news_controller_patch')
 

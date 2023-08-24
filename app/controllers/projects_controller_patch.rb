@@ -2,6 +2,10 @@ module ProjectsControllerPatch
   def self.included(base)
     base.class_eval do
       helper 'projects'
+      helper :queries
+      include QueriesHelper
+      helper :projects_queries
+      include ProjectsQueriesHelper
 
       before_action    :permit_parameters, only: [ :create, :update ]
       before_action    :authorize, :except => [ :index, :list, :new, :create, :copy, :archive, :unarchive, :destroy, :timeline ]
@@ -122,9 +126,12 @@ module ProjectsControllerPatch
 
       # Lists visible projects
       def index
+        retrieve_default_query
+        retrieve_project_query
+        scope = project_scope
+
         respond_to do |format|
           format.html {
-            scope = Project
             @projects = scope.active.visible.order('lft').all
             @archived = scope.where(status: [Project::STATUS_CLOSED, Project::STATUS_ARCHIVED]).visible.order('lft').all
           }
