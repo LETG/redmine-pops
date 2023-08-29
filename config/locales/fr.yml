@@ -16,3 +16,6 @@ fr:
   label_archived_projects: Projets archivés ou fermés
   field_private: Annonce privée
   label_overall_activity: Activité globale
+  field_coordinators: Coordinateurs
+  field_participants: Participants
+  field_year: Année
