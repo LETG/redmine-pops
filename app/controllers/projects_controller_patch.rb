@@ -126,6 +126,12 @@ module ProjectsControllerPatch
 
       # Lists visible projects
       def index
+        if params["v"]
+          params["v"]  = params["v"].select { |k,v| Array.wrap(v).select(&:present?).any? } 
+          params["f"]  = params["v"].keys
+          params["op"] = params["op"].select { |k,v| params["f"].include?(k) }
+        end
+
         retrieve_default_query
         retrieve_project_query
         scope = project_scope

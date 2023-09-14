@@ -5,13 +5,13 @@ ProjectQuery.class_eval do
   end
 
   def initialize_available_filters
-    add_available_filter("labs",         type: :list,    values: lambda {lab_values},                               label: :field_lab_partner)
-    add_available_filter("coordinators", type: :list,    values: lambda {member_values('Coordinateur')},            label: :field_coordinators)
-    add_available_filter("participants", type: :list,    values: lambda {member_values},                            label: :field_participants)
+    add_available_filter("labs",         type: :string)# ,     values: lambda {lab_values},                               label: :field_lab_partner)
+    
     add_available_filter("support_id",   type: :list,    values: Support.all.collect { |s| [ s.name, s.id.to_s ] }, label: :field_support)
     add_available_filter("year",         type: :list,    values: year_values,                                       label: :field_year)
-    add_available_filter("status",       type: :list,    values: lambda {project_statuses_values}
-    )
+    add_available_filter("status",       type: :list,    values: lambda {project_statuses_values} )
+    add_available_filter("coordinators", type: :list,    values: lambda {member_values('Coordinateur')},            label: :field_coordinators)
+    add_available_filter("participants", type: :list,    values: lambda {member_values},                            label: :field_participants)
   end
 
   def lab_values
@@ -36,8 +36,10 @@ ProjectQuery.class_eval do
 
       h
     end.sort_by { |_key, value| value[:name] }.to_h
-
-    users.collect { |k,v| [ v[:name], v[:ids].join('|') ] }
+    
+    results = users.collect { |k,v| [ v[:name], v[:ids].join('|') ] }
+    results.prepend(['', ''])
+    results
   end
 
   def year_values
@@ -47,12 +49,14 @@ ProjectQuery.class_eval do
       arr
     end.sort
 
-    (available_years.min..available_years.max).map { |i| [ i.to_s, i.to_s ] }
+    results = (available_years.min..available_years.max).map { |i| [ i.to_s, i.to_s ] }
+    results.prepend(['', ''])
+    results
   end
 
   def sql_for_labs_field(field, operator, value)
     value = value.map { |v| v.split('|') }.flatten
-    sql_for_field(field, operator, value, Lab.table_name, "id")
+    sql_for_field(field, operator, value, Lab.table_name, "name")
   end
 
   def sql_for_coordinators_field(field, operator, value)
