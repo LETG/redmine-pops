@@ -14,6 +14,14 @@ ProjectQuery.class_eval do
     add_available_filter("participants", type: :list,    values: lambda {member_values},                            label: :field_participants)
   end
 
+  def project_statuses_values
+    [
+      [l(:project_status_active), "#{Project::STATUS_ACTIVE}"],
+      [l(:project_status_closed), "#{Project::STATUS_CLOSED}"],
+      [l(:project_status_archived), "#{Project::STATUS_ARCHIVED}"]
+    ]
+  end
+
   def lab_values
     labs = Lab.all.inject({}) do |h, lab|
       h[lab.name.parameterize]       ||= { name: lab.name, ids: [] }
@@ -92,7 +100,7 @@ ProjectQuery.class_eval do
     scope = base_scope.
       order(order_option).
       joins(joins_for_order_statement(order_option.join(','))).
-      joins(:labs, :members)
+      left_joins(:labs, :members)
 
     if has_custom_field_column?
       scope = scope.preload(:custom_values)

@@ -14,6 +14,14 @@ module PopsProject
     has_many :labs
 
     # before_create :generate_identifier
+    before_save :update_associated
+
+    def update_associated
+      if self.changes.has_key?(:is_public) && !self.is_public
+        self.documents.update_all(visible_to_public: false)
+        self.news.update_all(private: true)
+      end
+    end
 
     accepts_nested_attributes_for :labs, reject_if: :all_blank, allow_destroy: true
   end
