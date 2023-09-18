@@ -17,21 +17,8 @@ module ProjectsControllerPatch
       self.main_menu = false
 
       def timeline
-        json = {
-          events: [
-            {
-              start_date: "",
-              end_date: "",
-              text: "",
-              media: "",
-              background: { color: "#17C4BB" }
-            }
-          ]
-        }
-
         @timeline_events = []
 
-        # docs.push({startDate: Date.today.strftime('%Y,%m,%d'), endDate: Date.today.strftime('%Y,%m,%d'), headline: "Aujourd'hui", text: "", tag: "", classname: ""})
         @timeline_events.push({
           start_date: {
             year: (@project.starts_date ? @project.starts_date.year : Date.today.year), 
@@ -50,10 +37,6 @@ module ProjectsControllerPatch
           unique_id: "project_event"
         });
 
-
-        #     , headline: p.name, text: (p.resume if p.resume), tag: "", classname: ""})
-
-
         @timeline_events.push({
           start_date: {
             year: Date.today.year,
@@ -65,15 +48,18 @@ module ProjectsControllerPatch
           }
         })
 
-        @project.documents.visible.where(visible_in_timeline: true).each do |document|
-          @timeline_events.push({
-            start_date: {
-              year: (document.created_date ? document.created_date.year : Date.today.year),
-              month: (document.created_date ? document.created_date.month : Date.today.month),
-              day: (document.created_date ? document.created_date.day : Date.today.day)
-            },
-            text: document.timeline_text(view_context)
-          })
+        DocumentCategory.all.each do |document_category|
+          @project.documents.visible.where(category_id: document_category.id, visible_in_timeline: true).each do |document|
+            @timeline_events.push({
+              start_date: {
+                year: (document.created_date ? document.created_date.year : Date.today.year),
+                month: (document.created_date ? document.created_date.month : Date.today.month),
+                day: (document.created_date ? document.created_date.day : Date.today.day)
+              },
+              text: document.timeline_text(view_context, document_category.id),
+              group: document_category.name,
+            })
+          end
         end
 
         @project.news.visible.where(visible_in_timeline: true).each do |news|
@@ -85,10 +71,8 @@ module ProjectsControllerPatch
               month: news.timeline_date.month,
               day: news.timeline_date.day
             },
-            background: {
-              color: "#17c4bb"
-            },
-            text: news.timeline_text(view_context)
+            text: news.timeline_text(view_context),
+            group: 'Annonces'
           })
         end
 

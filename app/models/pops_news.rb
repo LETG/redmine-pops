@@ -42,7 +42,7 @@ module PopsNews
 
     def timeline_text(view_context)
       {
-        headline: view_context.link_to("<div class='news'><div class='icon'><span class='fa fa-bullhorn'></span></div><div class='content'>#{self.display_title}</div></div>".html_safe, self, target: "_blank")
+        headline: view_context.link_to("<div class='news'><div class='icon'><span class='fa fa-bullhorn'></span></div><div class='content' title='#{self.display_title}'>#{self.display_title}</div></div>".html_safe, self, target: "_blank")
       }
     end
   end
