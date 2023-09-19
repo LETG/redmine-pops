@@ -17,52 +17,11 @@ module ProjectsControllerPatch
       self.main_menu = false
 
       def timeline
+        groups = []
         @timeline_events = []
 
-        @timeline_events.push({
-          start_date: {
-            year: (@project.starts_date ? @project.starts_date.year : Date.today.year), 
-            month: (@project.starts_date ? @project.starts_date.month : Date.today.month), 
-            day: (@project.starts_date ? @project.starts_date.day : Date.today.day)
-          },
-          end_date: {
-            year: (@project.ends_date ? @project.ends_date.year : Date.today.year),
-            month: (@project.ends_date ? @project.ends_date.month : Date.today.month),
-            day: (@project.ends_date ? @project.ends_date.day : Date.today.day),
-          },
-          text: {
-            headline: @project.name,
-            text: (@project.resume if @project.resume)
-          },
-          unique_id: "project_event"
-        });
-
-        @timeline_events.push({
-          start_date: {
-            year: Date.today.year,
-            month: Date.today.month,
-            day: Date.today.day
-          },
-          text: {
-            text: "<div class='today'>Aujourd'hui</div>"
-          }
-        })
-
-        DocumentCategory.all.each do |document_category|
-          @project.documents.visible.where(category_id: document_category.id, visible_in_timeline: true).each do |document|
-            @timeline_events.push({
-              start_date: {
-                year: (document.created_date ? document.created_date.year : Date.today.year),
-                month: (document.created_date ? document.created_date.month : Date.today.month),
-                day: (document.created_date ? document.created_date.day : Date.today.day)
-              },
-              text: document.timeline_text(view_context, document_category.id),
-              group: document_category.name,
-            })
-          end
-        end
-
         @project.news.visible.where(visible_in_timeline: true).each do |news|
+          groups << 'Annonces' unless groups.include?('Annonces')
           link = view_context.link_to(news.display_title, news, target: "_blank")
 
           @timeline_events.push({
@@ -75,6 +34,43 @@ module ProjectsControllerPatch
             group: 'Annonces'
           })
         end
+
+        DocumentCategory.all.each do |document_category|
+          @project.documents.visible.where(category_id: document_category.id, visible_in_timeline: true).each do |document|
+            groups << document_category.name unless groups.include?(document_category.name)
+
+            @timeline_events.push({
+              start_date: {
+                year: (document.created_date ? document.created_date.year : Date.today.year),
+                month: (document.created_date ? document.created_date.month : Date.today.month),
+                day: (document.created_date ? document.created_date.day : Date.today.day)
+              },
+              text: document.timeline_text(view_context, document_category.id),
+              group: document_category.name,
+            })
+          end
+        end
+
+        project_event = {
+          start_date: {
+            year: (@project.starts_date ? @project.starts_date.year : Date.today.year),
+            month: (@project.starts_date ? @project.starts_date.month : Date.today.month),
+            day: (@project.starts_date ? @project.starts_date.day : Date.today.day)
+          },
+          end_date: {
+            year: (@project.ends_date ? @project.ends_date.year : Date.today.year),
+            month: (@project.ends_date ? @project.ends_date.month : Date.today.month),
+            day: (@project.ends_date ? @project.ends_date.day : Date.today.day),
+          },
+          text: {
+            headline: @project.name,
+            text: (@project.resume if @project.resume)
+          },
+          unique_id: "project_event"
+        }
+
+        project_event[:group] = groups.first if groups.any?
+        @timeline_events.push(project_event);
 
         # p = @project
         # c = DocumentCategory.where(name: "Gestion de projet").first
