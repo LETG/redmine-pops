@@ -77,7 +77,8 @@ ProjectQuery.class_eval do
 
   def sql_for_members_field(field, operator, value)
     value = value.map { |v| v.split('|') }.flatten
-    sql_for_field(field, operator, value, Member.table_name, "id")
+    project_ids = Member.where(sql_for_field(field, operator, value, Member.table_name, "id")).map(&:project_id).uniq
+    "#{Project.table_name}.id IN (#{project_ids.join(', ')})"
   end
 
   def sql_for_year_field(field, operator, value)
