@@ -60,7 +60,8 @@ module ProjectsControllerPatch
             headline: @project.name,
             text: (@project.resume if @project.resume)
           },
-          unique_id: "project_event"
+          unique_id: "project_event",
+          group: 'Productions'
         })
 
         respond_to do |format|
