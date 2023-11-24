@@ -31,6 +31,19 @@ module ProjectsControllerPatch
           })
         end
 
+        if @timeline_events.blank?
+          @timeline_events.push({
+            start_date: {
+              year: Date.today.year,
+              month: Date.today.month,
+              day: Date.today.day
+            },
+            text: '',
+            unique_id: 'news-placeholder',
+            group: 'Annonces'
+          })
+        end
+
         DocumentCategory.all.each do |document_category|
           @project.documents.visible.where(category_id: document_category.id, visible_in_timeline: true).each do |document|
             @timeline_events.push({
@@ -42,6 +55,36 @@ module ProjectsControllerPatch
               text: document.timeline_text(view_context, document_category.id),
               group: document_category.name,
             })
+          end
+
+          unless @timeline_events.map { |te| te[:group] }.include?(document_category.name)
+            @timeline_events.push({
+              start_date: {
+                year: Date.today.year,
+                month: Date.today.month,
+                day: Date.today.day
+              },
+              text: '',
+              unique_id: "#{document_category.name.parameterize}-placeholder",
+              group: document_category.name
+            })
+          end
+        end
+
+        most_recent_date =
+          @timeline_events
+          .reject { |te| te[:unique_id].present? && te[:unique_id].match?(/.*-placeholder$/) }
+          .map { |te| Date.new(te[:start_date][:year], te[:start_date][:month], te[:start_date][:day]) }
+          .max
+
+        if most_recent_date.present?
+          @timeline_events.each do |te|
+            next if te[:unique_id].blank?
+            next unless te[:unique_id].match?(/.*-placeholder$/)
+
+            te[:start_date][:year] = most_recent_date.year
+            te[:start_date][:month] = most_recent_date.month
+            te[:start_date][:day] = most_recent_date.day
           end
         end
 
